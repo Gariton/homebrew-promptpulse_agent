@@ -2,7 +2,7 @@ class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
   url "https://github.com/your-org/codexmeter/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "d3cbbf2275b3a02e137c309a3cf5f79b479f31366ec9da0e78cce6a94394ac22"
+  sha256 "499a7898167cf622b33ba81acd87d8fe75ca8ffebb5b62e464b3e71e66e2b600"
   license "MIT"
 
   depends_on xcode: ["15.0", :build]
