@@ -1,13 +1,13 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  version "0.1.1"
+  version "0.1.2"
   license :cannot_represent
 
   on_macos do
     on_arm do
-      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.1/promptpulse-agent-macos-arm64.tar.gz"
-      sha256 "f1dc24308f77618d00f6bc931e69bb80ef3e1f0090936e276f67d91d4f9c04d9"
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.2/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "0f47cbfad97a853b96d269335870f5a6a2861d4e85a059194109ed6c2b1bc653"
     end
 
     on_intel do
@@ -25,6 +25,15 @@ class PromptpulseAgent < Formula
     example = etc/"promptpulse/agent.env.example"
     if !config.exist?
       config.write example.read
+      chmod 0600, config
+    elsif config.read.include?("your-project-ref") || config.read.include?("your_publishable_key")
+      example_contents = example.read
+      supabase_url = example_contents[/^PROMPTPULSE_SUPABASE_URL=.*$/]
+      supabase_key = example_contents[/^PROMPTPULSE_SUPABASE_KEY=.*$/]
+      contents = config.read
+      contents = contents.gsub(/^PROMPTPULSE_SUPABASE_URL=.*$/, supabase_url)
+      contents = contents.gsub(/^PROMPTPULSE_SUPABASE_KEY=.*$/, supabase_key)
+      config.write contents
       chmod 0600, config
     end
   end
