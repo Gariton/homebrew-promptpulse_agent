@@ -1,13 +1,13 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  version "0.1.2"
+  version "0.1.3"
   license :cannot_represent
 
   on_macos do
     on_arm do
-      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.2/promptpulse-agent-macos-arm64.tar.gz"
-      sha256 "0f47cbfad97a853b96d269335870f5a6a2861d4e85a059194109ed6c2b1bc653"
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.3/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "5e52177a927634b8b707ebd797c7e40800460d0a47458c878d5ef4b4848438bd"
     end
 
     on_intel do
@@ -17,14 +17,22 @@ class PromptpulseAgent < Formula
 
   def install
     bin.install "promptpulse-agent"
+    pkgshare.install "agent.env.example"
     (etc/"promptpulse").install "agent.env.example"
   end
 
   def post_install
     config = etc/"promptpulse/agent.env"
     example = etc/"promptpulse/agent.env.example"
+    release_example = pkgshare/"agent.env.example"
+    if !example.exist? || example.read.include?("your-project-ref") || example.read.include?("your_publishable_key")
+      FileUtils.mkdir_p example.dirname
+      File.write(example, release_example.read)
+      chmod 0600, example
+    end
+
     if !config.exist?
-      config.write example.read
+      File.write(config, example.read)
       chmod 0600, config
     elsif config.read.include?("your-project-ref") || config.read.include?("your_publishable_key")
       example_contents = example.read
@@ -33,7 +41,7 @@ class PromptpulseAgent < Formula
       contents = config.read
       contents = contents.gsub(/^PROMPTPULSE_SUPABASE_URL=.*$/, supabase_url)
       contents = contents.gsub(/^PROMPTPULSE_SUPABASE_KEY=.*$/, supabase_key)
-      config.write contents
+      File.write(config, contents)
       chmod 0600, config
     end
   end
