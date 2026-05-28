@@ -1,13 +1,13 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  version "0.1.4"
+  version "0.1.5"
   license :cannot_represent
 
   on_macos do
     on_arm do
-      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.4/promptpulse-agent-macos-arm64.tar.gz"
-      sha256 "6ac9779e9b22a387713c02fed34866b49e06b8a78e0a150cd31bd9c48e2e0988"
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.5/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "9674fad6eafef79a316e83a567d2c17a358e75c21333d4df4a7b17b847501118"
     end
 
     on_intel do
@@ -22,8 +22,8 @@ class PromptpulseAgent < Formula
     odie "agent.env.example not found in release archive" if env_example.nil?
 
     bin.install agent_binary => "promptpulse-agent"
-    pkgshare.install env_example => "agent.env.example"
-    (etc/"promptpulse").install env_example => "agent.env.example"
+    pkgshare.mkpath
+    File.write(pkgshare/"agent.env.example", File.read(env_example))
   end
 
   def post_install
