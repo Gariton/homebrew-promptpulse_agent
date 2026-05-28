@@ -1,18 +1,23 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  url "https://github.com/your-org/codexmeter/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "499a7898167cf622b33ba81acd87d8fe75ca8ffebb5b62e464b3e71e66e2b600"
-  license "MIT"
+  version "0.1.0"
+  license :cannot_represent
 
-  depends_on xcode: ["15.0", :build]
+  on_macos do
+    on_arm do
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.0/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "b333eaf607a499731c85eef09d8094faa36d655f75e0624165e7e1d98024c964"
+    end
+
+    on_intel do
+      odie "PromptPulse Agent is not available for Intel macOS yet"
+    end
+  end
 
   def install
-    cd "agents/promptpulse-agent" do
-      system "swift", "build", "-c", "release", "--disable-sandbox"
-      bin.install ".build/release/promptpulse-agent"
-      (etc/"promptpulse").install "packaging/agent.env.example" => "agent.env.example"
-    end
+    bin.install "promptpulse-agent"
+    (etc/"promptpulse").install "agent.env.example"
   end
 
   def post_install
@@ -33,6 +38,6 @@ class PromptpulseAgent < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/promptpulse-agent --version")
+    system "#{bin}/promptpulse-agent", "--version"
   end
 end
