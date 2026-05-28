@@ -1,13 +1,13 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  version "0.1.3"
+  version "0.1.4"
   license :cannot_represent
 
   on_macos do
     on_arm do
-      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.3/promptpulse-agent-macos-arm64.tar.gz"
-      sha256 "5e52177a927634b8b707ebd797c7e40800460d0a47458c878d5ef4b4848438bd"
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.4/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "6ac9779e9b22a387713c02fed34866b49e06b8a78e0a150cd31bd9c48e2e0988"
     end
 
     on_intel do
@@ -16,9 +16,14 @@ class PromptpulseAgent < Formula
   end
 
   def install
-    bin.install "promptpulse-agent"
-    pkgshare.install "agent.env.example"
-    (etc/"promptpulse").install "agent.env.example"
+    agent_binary = Dir["**/promptpulse-agent"].find { |path| File.file?(path) }
+    env_example = Dir["**/agent.env.example"].find { |path| File.file?(path) }
+    odie "promptpulse-agent binary not found in release archive" if agent_binary.nil?
+    odie "agent.env.example not found in release archive" if env_example.nil?
+
+    bin.install agent_binary => "promptpulse-agent"
+    pkgshare.install env_example => "agent.env.example"
+    (etc/"promptpulse").install env_example => "agent.env.example"
   end
 
   def post_install
