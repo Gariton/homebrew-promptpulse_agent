@@ -1,13 +1,13 @@
 class PromptpulseAgent < Formula
   desc "PromptPulse agent for reporting Codex CLI usage"
   homepage "https://github.com/Gariton/promptpulse-agent-releases"
-  version "0.1.9"
+  version "0.1.10"
   license :cannot_represent
 
   on_macos do
     on_arm do
-      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.9/promptpulse-agent-macos-arm64.tar.gz"
-      sha256 "c4e245c4d2a4f66b530600426517b9d73743424a4b18ffd637dea99a28ccc6b0"
+      url "https://github.com/Gariton/promptpulse-agent-releases/releases/download/v0.1.10/promptpulse-agent-macos-arm64.tar.gz"
+      sha256 "194fff9a7796a469a5784d90b8ce48c7eb76eb0a6e92d675e7bd1321c2da883f"
     end
 
     on_intel do
